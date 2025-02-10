@@ -49,12 +49,14 @@ func NewConfig(version string) manifests.Config {
 		},
 	}
 }
+
 func GetDefaultURL(crd string, version string) string {
 	if OverrideURL != "" {
 		return OverrideURL
 	}
 	return strings.Join([]string{fmt.Sprintf("https://raw.githubusercontent.com/hashicorp/consul-k8s/%s/control-plane/config/crd/bases", version), crd}, "/")
 }
+
 func init() {
 	wd, _ := os.Getwd()
 	f, _ := os.Open("./build/meshmodel_metadata.json")

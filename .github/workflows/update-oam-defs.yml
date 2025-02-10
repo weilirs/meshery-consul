@@ -26,7 +26,7 @@ jobs:
         run: |
           touch log.txt
           mkdir -p ~/.meshery/bin
-          (FORCE_DYNAMIC_REG=true DEBUG=true go run main.go > log.txt 2>&1) &  
+          (FORCE_DYNAMIC_REG=true MESHKIT_COMPONENT_VERSION=v1beta1 DEBUG=true go run main.go > log.txt 2>&1) &  
           end=$((SECONDS+300))
           while [ $SECONDS -lt $end ]; do
               if  [ "$(cat log.txt | grep "Component Creation completed for version")" != "" ];then
