@@ -8,15 +8,15 @@ import (
 	"github.com/google/uuid"
 	"github.com/layer5io/meshery-adapter-library/meshes"
 	"github.com/layer5io/meshery-consul/internal/config"
-	"github.com/layer5io/meshkit/models/oam/core/v1alpha1"
+	"github.com/layer5io/meshkit/models/oam/core/v1beta1"
 	mesherykube "github.com/layer5io/meshkit/utils/kubernetes"
 	"gopkg.in/yaml.v2"
 )
 
 // CompHandler is the type for functions which can handle OAM components
-type CompHandler func(*Consul, v1alpha1.Component, bool, []string) (string, error)
+type CompHandler func(*Consul, v1beta1.Component, bool, []string) (string, error)
 
-func (h *Consul) HandleComponents(comps []v1alpha1.Component, isDel bool, kubeconfigs []string) (string, error) {
+func (h *Consul) HandleComponents(comps []v1beta1.Component, isDel bool, kubeconfigs []string) (string, error) {
 	var errs []error
 	var msgs []string
 	stat1 := "deploying"
@@ -68,7 +68,7 @@ func (h *Consul) HandleComponents(comps []v1alpha1.Component, isDel bool, kubeco
 
 	return mergeMsgs(msgs), nil
 }
-func (h *Consul) HandleApplicationConfiguration(config v1alpha1.Configuration, isDel bool, kubeconfigs []string) (string, error) {
+func (h *Consul) HandleApplicationConfiguration(config v1beta1.Configuration, isDel bool, kubeconfigs []string) (string, error) {
 	var errs []error
 	var msgs []string
 	for _, comp := range config.Spec.Components {
@@ -102,7 +102,7 @@ func mergeMsgs(strs []string) string {
 	return strings.Join(strs, "\n")
 }
 
-func handleComponentConsulMesh(c *Consul, comp v1alpha1.Component, isDelete bool, kubeconfigs []string) (string, error) {
+func handleComponentConsulMesh(c *Consul, comp v1beta1.Component, isDelete bool, kubeconfigs []string) (string, error) {
 	// Get the consul version from the settings
 	// we are sure that the version of consul would be present
 	// because the configuration is already validated against the schema
@@ -119,7 +119,7 @@ func handleComponentConsulMesh(c *Consul, comp v1alpha1.Component, isDelete bool
 }
 func handleConsulCoreComponents(
 	c *Consul,
-	comp v1alpha1.Component,
+	comp v1beta1.Component,
 	isDel bool,
 	apiVersion,
 	kind string,
@@ -187,9 +187,9 @@ func handleConsulCoreComponents(
 	}
 	return msg, nil
 }
-func getAPIVersionFromComponent(comp v1alpha1.Component) string {
+func getAPIVersionFromComponent(comp v1beta1.Component) string {
 	return comp.Annotations["pattern.meshery.io.mesh.workload.k8sAPIVersion"]
 }
-func getKindFromComponent(comp v1alpha1.Component) string {
+func getKindFromComponent(comp v1beta1.Component) string {
 	return comp.Annotations["pattern.meshery.io.mesh.workload.k8sKind"]
 }
